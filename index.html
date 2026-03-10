@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FMG Daily Brief</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0f1419 0%, #1a202c 100%);
+            color: #f3f4f6;
+            line-height: 1.6;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #d4af37;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #d4af37, #fbbf24);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .date {
+            color: #d1d5db;
+            font-size: 1.1rem;
+        }
+
+        .theme {
+            background: rgba(212, 175, 55, 0.1);
+            border: 2px solid #d4af37;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .theme h2 {
+            color: #d4af37;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .section {
+            background: #1a202c;
+            border-left: 4px solid #d4af37;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .section h3 {
+            color: #d4af37;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .section p, .section li {
+            color: #d1d5db;
+            margin-bottom: 10px;
+            line-height: 1.8;
+        }
+
+        .section ul {
+            margin-left: 20px;
+        }
+
+        .quiz-item {
+            background: #0f1419;
+            padding: 15px;
+            margin: 12px 0;
+            border-radius: 6px;
+            border-left: 3px solid #fbbf24;
+        }
+
+        .question {
+            color: #fbbf24;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .options {
+            margin-left: 15px;
+            margin-bottom: 10px;
+        }
+
+        .option {
+            color: #d1d5db;
+            margin: 5px 0;
+        }
+
+        .answer {
+            background: rgba(16, 185, 129, 0.1);
+            padding: 10px;
+            margin-top: 8px;
+            border-left: 3px solid #10b981;
+            color: #86efac;
+            font-size: 0.9rem;
+            border-radius: 4px;
+        }
+
+        .glossary-item {
+            margin-bottom: 15px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .term {
+            color: #d4af37;
+            font-weight: 600;
+        }
+
+        .definition {
+            color: #d1d5db;
+            margin-top: 5px;
+            font-size: 0.95rem;
+        }
+
+        .resource {
+            background: #0f1419;
+            padding: 12px;
+            margin: 10px 0;
+            border-left: 3px solid #fbbf24;
+            border-radius: 4px;
+        }
+
+        .resource-title {
+            color: #f3f4f6;
+            font-weight: 600;
+        }
+
+        .resource-desc {
+            color: #d1d5db;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        button {
+            background: linear-gradient(135deg, #d4af37, #fbbf24);
+            color: #0f1419;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 30px;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            .theme h2 {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>FMG Daily Brief</h1>
+            <p class="date" id="dateDisplay"></p>
+        </header>
+
+        <div id="content"></div>
+
+        <center>
+            <button onclick="location.reload()">Refresh</button>
+        </center>
+    </div>
+
+    <script>
+        // Content library
+        const concepts = [
+            {
+                title: "Model Risk Management (SR 11-7)",
+                text: "SR 11-7, issued by the Federal Reserve in 2011, established comprehensive guidance on model risk management. The bulletin emphasizes that banks must have robust processes for developing, validating, and implementing models. Key principles include: (1) Models must be conceptually sound and appropriate for their intended use; (2) All models require independent validation before deployment; (3) Model governance must involve multiple lines of defense; (4) Regular monitoring and performance tracking are essential; (5) Effective model risk management reduces operational risks and supports prudent risk-taking. Large banks must ensure their fraud detection models meet these standards through rigorous testing, documentation, and oversight."
+            },
+            {
+                title: "AI/ML Governance in Fraud Detection",
+                text: "Machine learning models drive modern fraud detection, but they introduce governance challenges. Key governance areas include: (1) Model Transparency: Understanding how the model makes decisions (explainability); (2) Bias Detection: Ensuring models don't discriminate against specific customer segments; (3) Data Quality: Validating training data is representative and accurate; (4) Model Monitoring: Tracking performance metrics like AUC-ROC, precision, recall; (5) Regulatory Compliance: Meeting SR 21-8 expectations for AI/ML; (6) Human Oversight: Fraud teams must review high-impact model decisions. Effective governance balances automation with control, ensuring models enhance rather than replace human judgment."
+            },
+            {
+                title: "Model Validation Best Practices",
+                text: "Validation is the critical third step in model development (after design and build). Best practices include: (1) Conceptual Soundness Review: Does the model logic make sense for detecting fraud? (2) Outcome Analysis: Testing the model on historical data to assess accuracy and false positive rates; (3) Stability Testing: How does the model perform across different time periods and customer segments? (4) Documentation: Comprehensive records of all testing, results, and decisions; (5) Independence: Validators must be separate from model developers; (6) Governance Frameworks: Clear approval workflows before production deployment. Strong validation reduces the risk of deploying models with hidden biases or performance issues."
+            },
+            {
+                title: "Fraud Typologies: ATO & Synthetic Identity",
+                text: "Account Takeover (ATO) occurs when fraudsters compromise legitimate customer credentials and use accounts for unauthorized transactions. Detection methods include: velocity analysis (unusual login locations/times), behavioral analytics (transaction patterns), and device fingerprinting. Synthetic Identity Fraud involves creating fake identities using real and fabricated information to obtain accounts and credit. Key signals: mismatches between identity verification documents, thin credit files, and unusual application patterns. Both schemes are growing rapidly in real-time payment systems. Models must detect these with minimal false positives to avoid blocking legitimate customers. Validation teams must ensure models catch these evolving threats without creating friction."
+            },
+            {
+                title: "Real-Time Payment Fraud Governance",
+                text: "Real-time payment systems (RTP, FedNow, Zelle) process transactions instantly with limited reversal options. Fraud governance challenges: (1) Speed: Models must decide in milliseconds; (2) Irreversibility: Wrong blocks lose customers; wrong approvals lose money; (3) Volume: Millions of daily transactions require scalable monitoring; (4) Layering: Fraudsters use multiple small transactions to evade detection; (5) Emerging Threats: New fraud patterns appear weekly. Governance frameworks must include: pre-transaction monitoring (velocity, device, behavioral), post-transaction anomaly detection (pattern changes), and rapid response protocols. Model risk management is critical because mistakes in real-time payment environments have immediate financial impact."
+            },
+            {
+                title: "BSA/AML and Fraud Model Intersection",
+                text: "Bank Secrecy Act (BSA) and Anti-Money Laundering (AML) requirements intersect with fraud models. Key connections: (1) Transaction Monitoring: Models must flag suspicious patterns for both fraud (unauthorized use) and AML (potential illicit activity); (2) Customer Due Diligence: KYC data validates customer identity, supporting fraud detection; (3) Structured Deposits: Fraudsters use layering to evade both fraud and AML systems; (4) Sanctions Screening: Models must check customer names against OFAC lists; (5) Regulatory Reporting: Models feed suspicious activity reports (SARs). Governance teams must ensure models serve both fraud and AML purposes, with clear governance ownership and independent validation for each use case."
+            },
+            {
+                title: "Explainability in Fraud Models (SHAP & LIME)",
+                text: "Regulators increasingly require explainability: why did the model block this transaction? Key techniques: (1) SHAP (SHapley Additive exPlanations): Shows which features contributed most to each prediction; (2) LIME (Local Interpretable Model-agnostic Explanations): Explains individual predictions in understandable terms; (3) Feature Importance: Identifies top risk factors the model uses; (4) Decision Trees: Simpler models that are inherently interpretable. Governance requirements: (1) Ability to explain high-risk decisions to customers; (2) Documentation of which features drive fraud signals; (3) Testing that explanations are accurate; (4) Monitoring for model drift that changes explanations. Explainability supports both regulatory compliance and customer trust."
+            },
+            {
+                title: "Model Lifecycle: Development to Retirement",
+                text: "A complete model lifecycle spans: (1) Development: Requirements gathering, data preparation, model training, initial validation; (2) Validation: Independent testing, governance approval, regulatory review; (3) Deployment: Production rollout, monitoring setup, documentation; (4) Monitoring: Daily/weekly performance tracking, alerts for model drift; (5) Maintenance: Retraining when performance degrades, updating for new fraud patterns; (6) Retirement: Decommissioning when replaced or no longer effective. Each stage has governance requirements: sign-offs, documentation, testing protocols. Models don't end at deployment—ongoing monitoring and maintenance are critical. Poor lifecycle management is a common audit finding."
+            },
+            {
+                title: "Regulatory Updates & Guidance",
+                text: "Recent regulatory focus areas: (1) SR 21-8 (AI/ML Guidance): Expectations for transparent, explainable AI in banking; (2) OCC Bulletin 2023-55: Expectations for AI/ML governance and risk management; (3) CFPB Focus: Algorithmic bias and fair lending concerns; (4) FinCEN Updates: AML/sanctions compliance in real-time payments; (5) Basel Committee Guidance: Operational risk management including model risk. Governance teams must track these updates, assess impact on current models, and adjust governance frameworks. Regulatory expectations are evolving faster than technology—staying current is a continuous compliance obligation."
+            },
+            {
+                title: "Industry Frameworks: NIST AI RMF",
+                text: "The National Institute of Standards and Technology (NIST) released the AI Risk Management Framework (AI RMF) in 2023. Key components: (1) Govern: Establish policies, roles, and accountability; (2) Map: Understand AI system capabilities and limitations; (3) Measure: Assess risks through testing and monitoring; (4) Manage: Implement controls and mitigation strategies. For fraud models: (1) Governance: Clear ownership and oversight; (2) Mapping: Document model purpose, data, assumptions; (3) Measurement: Performance metrics, bias testing, fairness audits; (4) Management: Controls for drift, escalation procedures. NIST AI RMF is becoming a benchmark for regulatory expectations and industry best practices."
+            },
+            {
+                title: "GenAI Risks in Financial Services",
+                text: "Generative AI (ChatGPT, Claude) introduces new risks: (1) Hallucination: Models generate false information confidently; (2) Training Data Risks: What if a GenAI model was trained on proprietary fraud patterns?; (3) Prompt Injection: Bad actors manipulate AI systems through clever prompts; (4) Model Theft: Competitors stealing proprietary model logic; (5) Privacy: Customer data in prompts could be exposed. Governance frameworks must: (1) Restrict GenAI use for sensitive data; (2) Monitor GenAI outputs before use in fraud decisions; (3) Establish clear policies on GenAI tool usage; (4) Test for bias and accuracy; (5) Document all GenAI interactions. GenAI governance is still evolving—regulators are watching closely."
+            },
+            {
+                title: "Model Performance Monitoring Metrics",
+                text: "Key metrics for fraud model monitoring: (1) AUC-ROC (Area Under Curve): Overall model discrimination (target: >0.85); (2) Gini Coefficient: Similar to AUC-ROC, used in banking (target: >0.70); (3) KS Statistic: Maximum separation between fraud/non-fraud distributions; (4) Population Stability Index (PSI): Detects score distribution drift over time; (5) Precision/Recall: False positive vs. false negative tradeoff; (6) Monthly Fraud Rate: Actual fraud caught vs. missed. Governance requires: (1) Daily monitoring dashboards; (2) Alerts for metric degradation; (3) Root cause analysis when metrics shift; (4) Documented remediation plans. Strong monitoring catches model drift early before it impacts fraud detection."
+            },
+            {
+                title: "Three Lines of Defense Model",
+                text: "Governance requires three independent defense lines: (1) First Line (Business Unit): Fraud prevention teams embed controls daily, manage customer escalations, adjust fraud rules; (2) Second Line (Risk/Compliance): Model governance teams validate models, monitor performance, ensure regulatory compliance, document decisions; (3) Third Line (Internal Audit): Independent review of model governance processes, testing of controls, assessment of regulatory alignment. Each line has distinct responsibilities and reporting chains. Effective governance requires healthy tension between lines—first line wants efficiency, second line focuses on risk, third line provides independent assurance. Poor governance happens when lines overlap or go silent."
+            },
+            {
+                title: "Vendor & Third-Party Model Governance",
+                text: "Many banks use vendor models (Kount, FICO, etc.) rather than building in-house. Governance challenges: (1) Transparency: Vendors often won't disclose model details (proprietary); (2) Validation: How do you validate a black-box vendor model?; (3) Data: Does the vendor model perform on your customer data?; (4) Monitoring: Can you monitor vendor model performance?; (5) Alternatives: What if the vendor model fails? Governance requirements: (1) Service level agreements (SLAs) for performance; (2) Regular testing and performance review; (3) Documentation of vendor model logic (where possible); (4) Transition plans if vendor relationships end; (5) Regulatory expectations for third-party risk. Vendor governance is increasingly important as banks rely on external models."
+            },
+            {
+                title: "Data Quality & Lineage in Fraud Models",
+                text: "Garbage in, garbage out. Data quality is foundational. Key areas: (1) Completeness: Are required fields populated? (2) Accuracy: Is the data correct? (3) Timeliness: Is data recent enough for real-time decisions? (4) Consistency: Does data match across systems? Data Lineage: Understanding data sources, transformations, and dependencies. Governance requirements: (1) Data dictionaries: Clear definition of each field; (2) Quality metrics: Automated checks for completeness, accuracy; (3) Lineage documentation: How data flows from source to model; (4) Impact analysis: If source data changes, what breaks?; (5) Audit trails: Who accessed/changed data and when. Poor data quality is a common cause of model failure. Strong data governance supports strong model governance."
+            }
+        ];
+
+        const regulatory = [
+            "SR 11-7 requires banks to validate all models before deployment and maintain ongoing monitoring. Recent OCC examinations have focused on whether validation is truly independent from model developers.",
+            "SR 21-8 establishes expectations for AI/ML governance including transparency, testing for bias, and documented risk management. Banks failing to meet these expectations face regulatory criticism.",
+            "OCC Bulletin 2023-55 emphasizes governance for AI/ML, including clear roles, risk assessment, and monitoring. The bulletin highlights that boards must understand AI risks.",
+            "FDIC guidance on model risk management requires documentation of all model assumptions, testing, and monitoring. Examiners particularly focus on fraud model governance.",
+            "FinCEN's recent AML/CFT guidance emphasizes real-time payment monitoring and transaction monitoring for both fraud and AML purposes. Integration of fraud and AML models is expected.",
+            "CFPB enforcement actions focus on algorithmic bias in fraud models. If fraud models disproportionately block certain demographic groups, fair lending violations may result.",
+            "Federal Reserve supervisory guidance (SR 21-10) on cybersecurity includes expectations for monitoring unauthorized access (ATO) threats. Fraud models are key controls.",
+            "Basel Committee guidance on operational risk emphasizes model risk as an operational risk category. This elevates model governance importance from compliance to broader risk management.",
+            "NIST AI RMF has been adopted by federal agencies and is becoming a benchmark for private sector AI governance. Expect regulators to reference NIST AI RMF.",
+            "Recent Fed policy letters emphasize real-time payment fraud risk management. Banks must demonstrate governance controls for instant payment systems."
+        ];
+
+        const threats = [
+            "Deepfake-enabled identity verification bypass: Fraudsters use AI-generated videos to impersonate customers during KYC verification, creating synthetic identities with real-looking documents.",
+            "Cross-platform money mule networks: Organized fraud rings coordinate transfers across multiple banks and platforms, using bot accounts to obscure the money flow.",
+            "APP (Authorized Push Payment) fraud: Fraudsters impersonate banks and convince customers to transfer money directly to attacker accounts. Increasingly sophisticated social engineering.",
+            "Real-time payment system layering: Fraudsters exploit instant settlement to move stolen funds across multiple banks before detection, using automation to scale attacks.",
+            "Compromised business account attacks: Fraudsters target small business accounts (higher balances, less monitoring) using credential theft, then wire large amounts.",
+            "Velocity attacks on biometric systems: Fraudsters attempt rapid biometric verifications across multiple institutions using coordinated attacks to overwhelm liveness detection.",
+            "Cryptocurrency on-ramp fraud: Fraudsters steal funds, immediately convert to crypto for irreversible movement, then cash out through decentralized exchanges.",
+            "Mobile app malware campaigns: Malware targeting banking apps (Trojan-style) allows fraudsters to intercept OTP codes and conduct silent fraud.",
+            "SIM swap attacks on 2FA: Fraudsters impersonate customers with carrier support, move phone numbers to fraudster devices, and bypass SMS 2FA protections.",
+            "Card brand switching attacks: Fraudsters test stolen cards across different networks (Visa, Mastercard, Amex) to find which one works, using low-value transactions.",
+            "Third-party processor compromise: Fraudsters target payment processors and middleware, potentially compromising thousands of merchant accounts simultaneously.",
+            "AI-powered voice spoofing: Deepfake audio of customer voices or bank employees enables more convincing social engineering attacks.",
+            "Credential stuffing at scale: Fraudsters use leaked credentials from other platforms to attempt mass account takeover across banks.",
+            "Account farming: Fraudsters create hundreds of accounts with synthetic identities, build minimal history, then coordinate fraudulent activity across all accounts.",
+            "Device fingerprint spoofing: Sophisticated fraudsters clone device characteristics to impersonate legitimate customer devices and bypass device-based fraud controls."
+        ];
+
+        const tips = [
+            "Document all model assumptions explicitly. When reviewing a fraud model, ask: 'What are we assuming about the data, customers, and fraud patterns?' Undocumented assumptions are audit findings waiting to happen.",
+            "Create a model inventory spreadsheet: Model Name, Purpose, Deployment Date, Owner, Last Validation Date, Monitoring Metrics. Update monthly. This simple tool prevents models from slipping through governance cracks.",
+            "Establish a model monitoring dashboard: Daily checks on AUC-ROC, Gini, false positive rate, and KS statistic. Red/yellow/green alerts signal when metrics drift. Share with business stakeholders weekly.",
+            "For model validation reports, include: business case, data description, test results, performance benchmarks, limitations, and sign-off from independent validator. Clear structure = regulatory compliance.",
+            "When a model's performance degrades: First, check data quality (is the source data still accurate?). Second, check for changes in fraud patterns (are new threats emerging?). Third, plan retraining. Most drift is due to data or fraud changes, not model bugs.",
+            "Set a model review cadence: Annual validation is minimum. But high-risk models (real-time payment fraud) should be reviewed quarterly. Document the review schedule and ownership.",
+            "For AI/ML models, create an explainability checklist: Can you explain top 5 features driving the decision? Can you explain a specific customer's flagged transaction? If no, the model isn't ready for production.",
+            "When vendors provide fraud models, insist on performance benchmarking against historical data. Test the vendor model on 6 months of your bank's transactions. Know its performance before deployment.",
+            "Create a fraud model escalation procedure: When the model blocks a transaction, who reviews it? How quickly? Document the SLA and track performance. Slow escalation = frustrated customers and missed legitimate transactions.",
+            "Implement a model change control process: Any change to fraud model logic (rule changes, feature engineering, retraining) requires documented testing and approval. Prevent unauthorized model changes."
+        ];
+
+        const quiz = [
+            {
+                q: "SR 11-7 requires independent validation of all models before deployment. What does 'independent' mean?",
+                opts: ["Validation by someone not on the model development team", "Using a different software tool to validate", "Having two people review the model", "Validation by external consultants"],
+                ans: "A",
+                exp: "SR 11-7 specifies that independent validators must not be involved in model development. They should report through separate governance lines. Using different tools or having multiple reviewers can help, but structural independence (different team/reporting line) is the key requirement."
+            },
+            {
+                q: "Which metric is most critical for monitoring fraud model performance?",
+                opts: ["Accuracy alone", "AUC-ROC or Gini coefficient", "Number of false positives", "Model training speed"],
+                ans: "B",
+                exp: "AUC-ROC and Gini measure the model's ability to discriminate between fraud and legitimate transactions across all thresholds. Accuracy can be misleading when fraud rates are low. False positives matter operationally, but AUC-ROC/Gini measure overall model quality."
+            },
+            {
+                q: "A fraud model's Gini coefficient drops from 0.75 to 0.68 over three months. What should you do first?",
+                opts: ["Immediately retire the model", "Check if source data quality has degraded", "Increase the fraud detection threshold", "Schedule annual validation"],
+                ans: "B",
+                exp: "Model performance degradation usually indicates a change in the source data, emerging fraud patterns, or data quality issues—not a problem with the model itself. Data quality checks are the first diagnostic step. If data is fine, then investigate fraud pattern changes."
+            },
+            {
+                q: "Which approach BEST addresses model bias in fraud detection?",
+                opts: ["Using only age as a variable", "Testing model performance separately by demographic groups", "Removing all demographic variables", "Using an older, simpler model"],
+                ans: "B",
+                exp: "The best approach is to test model performance (false positive rate, false negative rate, approval rate) separately for each demographic group. This reveals bias. Removing variables can hide bias (data leakage through proxy variables). Older models aren't inherently better."
+            },
+            {
+                q: "What is the primary purpose of SHAP in fraud model governance?",
+                opts: ["To increase model accuracy", "To explain why the model made a specific prediction", "To reduce computational cost", "To eliminate false positives"],
+                ans: "B",
+                exp: "SHAP (SHapley Additive exPlanations) helps explain individual predictions by showing which features contributed most. This is critical for regulatory compliance, customer explanations, and auditing model decisions. It doesn't improve accuracy or reduce cost."
+            },
+            {
+                q: "A vendor provides a fraud detection model but won't disclose internal logic. How should you proceed?",
+                opts: ["Reject the vendor entirely", "Test the vendor model on your own data before deployment and establish SLAs", "Trust the vendor's reputation", "Use it in shadow mode indefinitely"],
+                ans: "B",
+                exp: "You can't always get full vendor transparency, but you CAN test performance on your data, establish service level agreements, and monitor ongoing performance. This provides governance even without internal model details."
+            },
+            {
+                q: "What is Population Stability Index (PSI) used to detect?",
+                opts: ["Fraud patterns change", "Model drift in score distribution over time", "Customer demographic changes", "Regulatory compliance"],
+                ans: "B",
+                exp: "PSI measures whether the distribution of model scores has changed over time. High PSI indicates the model is seeing different data patterns (model drift). This is a key monitoring metric alongside performance metrics like AUC-ROC."
+            },
+            {
+                q: "In the three lines of defense, which line owns model validation?",
+                opts: ["First line (business unit)", "Second line (risk/compliance)", "Third line (internal audit)", "External consultants"],
+                ans: "B",
+                exp: "The second line of defense (risk/compliance/model governance teams) owns validation, monitoring, and governance. The first line operates the models. The third line audits whether governance is effective. This separation prevents conflicts of interest."
+            },
+            {
+                q: "Which is a key governance requirement for real-time payment fraud models?",
+                opts: ["Monthly monitoring is sufficient", "Millisecond-level decision capability with documented fallbacks", "Maximizing fraud catch rate regardless of false positives", "Validation once per year"],
+                ans: "B",
+                exp: "Real-time payments require millisecond decisions, so models must be fast AND accurate. You need documented fallback procedures when the model is uncertain. One-time annual validation is insufficient for high-velocity systems."
+            },
+            {
+                q: "What does 'conceptual soundness' mean in model validation?",
+                opts: ["The model code is well-written", "The model logic makes business sense for detecting fraud", "The model uses all available features", "The model has high accuracy"],
+                ans: "B",
+                exp: "Conceptual soundness asks: does this model make sense? Would a fraud expert agree with the logic? Are assumptions reasonable? This is separate from statistical performance and is part of independent validation."
+            }
+        ];
+
+        const glossary = [
+            { term: "AUC-ROC", def: "Area Under the Receiver Operating Characteristic Curve. Measures a model's ability to distinguish fraud from legitimate transactions (0.5 = random, 1.0 = perfect). Target: >0.85 for fraud models." },
+            { term: "PSI (Population Stability Index)", def: "Measures whether a model's score distribution has changed over time, indicating model drift. High PSI (>0.25) signals the model may need retraining." },
+            { term: "Conceptual Soundness", def: "The degree to which a model's logic and assumptions align with business knowledge of fraud. Assessed during independent validation before deployment." },
+            { term: "Model Drift", def: "Change in model performance over time due to shifts in input data distribution, fraud patterns, or customer behavior. Detected through monitoring metrics." },
+            { term: "Explainability", def: "The ability to explain why a model made a specific decision (e.g., why it blocked a transaction). Techniques include SHAP and LIME. Required by SR 21-8." },
+            { term: "Gini Coefficient", def: "Similar to AUC-ROC, measures model discrimination ability. Widely used in banking (target: >0.70). Calculated as 2 × AUC - 1." },
+            { term: "KS Statistic", def: "Kolmogorov-Smirnov statistic. Measures maximum separation between fraud and non-fraud score distributions. Higher is better (target: >0.30)." },
+            { term: "False Positive Rate", def: "Percentage of legitimate transactions incorrectly flagged as fraud. High rates cause customer friction; low rates require careful model tuning." },
+            { term: "Synthetic Identity Fraud", def: "Creating fake identities (using real+fake information) to open accounts and commit fraud. Harder to detect than ATO; requires identity verification focus." },
+            { term: "ATO (Account Takeover)", def: "Fraudster uses stolen customer credentials to access legitimate accounts. Detected through velocity, behavioral, and device analysis. Common in real-time payments." }
+        ];
+
+        const resources = [
+            { title: "Federal Reserve SR 11-7", desc: "Model Risk Management guidance. Essential reading for understanding regulatory expectations on model validation and governance." },
+            { title: "Federal Reserve SR 21-8", desc: "Guidance on AI/ML in banking. Covers governance, transparency, bias testing, and monitoring. Current regulatory standard." },
+            { title: "OCC Bulletin 2023-55", desc: "AI/ML governance expectations. Emphasizes board-level understanding, risk assessment, and documented controls." },
+            { title: "NIST AI Risk Management Framework", desc: "AI RMF provides Govern-Map-Measure-Manage framework. Becoming industry standard for AI governance." },
+            { title: "Basel Committee on Banking Supervision", desc: "Operational Risk guidance including model risk. International perspective on model governance." },
+            { title: "FFIEC Guidance on AI/ML", desc: "Federal Financial Institutions Examination Council perspectives. Practical guidance aligned with U.S. regulators." }
+        ];
+
+        // Seeded random based on date
+        function seededRandom(seed) {
+            const x = Math.sin(seed) * 10000;
+            return x - Math.floor(x);
+        }
+
+        function getTodaySeed() {
+            const today = new Date();
+            return today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+        }
+
+        function getByDate(array, seed) {
+            const index = Math.floor(seededRandom(seed) * array.length);
+            return array[index];
+        }
+
+        function getRandomByDate(array, count, seed) {
+            const result = [];
+            const indices = new Set();
+            while (indices.size < count && indices.size < array.length) {
+                const idx = Math.floor(seededRandom(seed + indices.size * 1000) * array.length);
+                indices.add(idx);
+            }
+            return Array.from(indices).map(i => array[i]);
+        }
+
+        function generateBrief() {
+            const seed = getTodaySeed();
+            const today = new Date();
+            const dateStr = today.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+            const concept = getByDate(concepts, seed);
+            const regSpotlight = getByDate(regulatory, seed + 1);
+            const threat = getByDate(threats, seed + 2);
+            const tip = getByDate(tips, seed + 3);
+            const quizItems = getRandomByDate(quiz, 3, seed + 4);
+            const glossaryItems = getRandomByDate(glossary, 5, seed + 5);
+            const resourcesItems = getRandomByDate(resources, 3, seed + 6);
+
+            let html = `
+                <div class="theme">
+                    <h2>Daily Focus: FMG Essentials</h2>
+                    <p style="color: #d1d5db;">Refreshes automatically every day</p>
+                </div>
+
+                <div class="section">
+                    <h3>📅 ${dateStr}</h3>
+                </div>
+
+                <div class="section">
+                    <h3>💡 Concept of the Day</h3>
+                    <strong>${concept.title}</strong>
+                    <p>${concept.text}</p>
+                </div>
+
+                <div class="section">
+                    <h3>⚖️ Regulatory Spotlight</h3>
+                    <p>${regSpotlight}</p>
+                </div>
+
+                <div class="section">
+                    <h3>🚨 Fraud Threat Update</h3>
+                    <p>${threat}</p>
+                </div>
+
+                <div class="section">
+                    <h3>🔧 Practical Governance Tip</h3>
+                    <p>${tip}</p>
+                </div>
+
+                <div class="section">
+                    <h3>❓ Quiz Yourself (3 Questions)</h3>
+                    ${quizItems.map((item, i) => `
+                        <div class="quiz-item">
+                            <div class="question">Q${i+1}: ${item.q}</div>
+                            <div class="options">
+                                ${item.opts.map((opt, j) => `
+                                    <div class="option">${String.fromCharCode(65 + j)}) ${opt}</div>
+                                `).join('')}
+                            </div>
+                            <div class="answer"><strong>Answer: ${item.ans}</strong> — ${item.exp}</div>
+                        </div>
+                    `).join('')}
+                </div>
+
+                <div class="section">
+                    <h3>📖 Key Terms Glossary</h3>
+                    ${glossaryItems.map(item => `
+                        <div class="glossary-item">
+                            <div class="term">${item.term}</div>
+                            <div class="definition">${item.def}</div>
+                        </div>
+                    `).join('')}
+                </div>
+
+                <div class="section">
+                    <h3>📚 Further Reading</h3>
+                    ${resourcesItems.map(resource => `
+                        <div class="resource">
+                            <div class="resource-title">${resource.title}</div>
+                            <div class="resource-desc">${resource.desc}</div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+
+            document.getElementById('dateDisplay').textContent = dateStr;
+            document.getElementById('content').innerHTML = html;
+        }
+
+        // Generate on load
+        generateBrief();
+    </script>
+</body>
+</html>
