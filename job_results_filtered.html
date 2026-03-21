@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Job Search Results – 2026-03-21</title>
+<style>
+  :root {
+    --bg:#0f1117; --card:#1a1d27; --accent:#4fc3f7;
+    --text:#e0e0e0; --dim:#888; --green:#4caf50;
+    --border:#2a2d3e;
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--text); font-family:'Segoe UI',Arial,sans-serif;
+          font-size:14px; padding:24px; }
+  h1   { color:var(--accent); font-size:1.6rem; margin-bottom:4px; }
+  .meta{ color:var(--dim); font-size:.85rem; margin-bottom:20px; }
+  .summary { display:flex; gap:16px; margin-bottom:20px; flex-wrap:wrap; }
+  .stat { background:var(--card); border:1px solid var(--border);
+           border-radius:8px; padding:12px 20px; text-align:center; }
+  .stat .val { font-size:1.8rem; font-weight:700; color:var(--accent); }
+  .stat .lbl { font-size:.75rem; color:var(--dim); }
+
+  /* Filters */
+  .filters { background:var(--card); border:1px solid var(--border);
+              border-radius:8px; padding:16px; margin-bottom:20px; }
+  .filters h3 { color:var(--accent); margin-bottom:10px; font-size:.95rem; }
+  .filter-row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+  input[type=text] { background:#252836; border:1px solid var(--border);
+                      color:var(--text); border-radius:6px; padding:6px 12px;
+                      font-size:.85rem; width:260px; }
+  input[type=text]::placeholder { color:var(--dim); }
+  select { background:#252836; border:1px solid var(--border); color:var(--text);
+            border-radius:6px; padding:6px 10px; font-size:.85rem; }
+  .btn { background:var(--accent); color:#000; border:none; border-radius:6px;
+          padding:6px 16px; cursor:pointer; font-weight:600; font-size:.85rem; }
+  .btn:hover { opacity:.85; }
+  .btn-reset { background:#444; color:var(--text); }
+
+  /* Table */
+  .tbl-wrap { overflow-x:auto; border-radius:8px; border:1px solid var(--border); }
+  table { width:100%; border-collapse:collapse; }
+  thead tr { background:#252836; }
+  th { padding:10px 12px; text-align:left; color:var(--accent);
+        font-size:.8rem; text-transform:uppercase; letter-spacing:.04em;
+        border-bottom:1px solid var(--border); white-space:nowrap; }
+  td { padding:10px 12px; border-bottom:1px solid var(--border);
+        vertical-align:top; }
+  tr:last-child td { border-bottom:none; }
+  tr:hover td { background:rgba(255,255,255,.03); }
+  .num  { color:var(--dim); text-align:center; width:30px; }
+  .stars{ color:#f9a825; letter-spacing:2px; }
+  .notes{ color:var(--dim); font-size:.8rem; max-width:260px; }
+  .tag  { background:#252836; border:1px solid var(--border); border-radius:4px;
+           padding:1px 6px; font-size:.72rem; color:var(--dim);
+           display:inline-block; margin:1px; }
+  .tier { padding:2px 8px; border-radius:12px; font-size:.72rem;
+           font-weight:700; color:#fff; white-space:nowrap; }
+  .apply-btn { display:inline-block; background:var(--green); color:#000;
+                font-weight:700; font-size:.8rem; padding:5px 14px;
+                border-radius:6px; text-decoration:none; white-space:nowrap; }
+  .apply-btn:hover { opacity:.85; }
+  tr.hidden { display:none; }
+
+  /* Job boards section */
+  .jb-section { margin-top:28px; }
+  .jb-section h2 { color:var(--accent); font-size:1rem; margin-bottom:12px; }
+  .jb-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:10px; }
+  .jb-card { background:var(--card); border:1px solid var(--border); border-radius:8px;
+              padding:12px; }
+  .jb-card .co { font-weight:700; margin-bottom:4px; }
+  .jb-card a  { color:var(--accent); font-size:.8rem; text-decoration:none;
+                 display:block; margin-top:4px; }
+  .jb-card a:hover { text-decoration:underline; }
+
+  footer { margin-top:28px; color:var(--dim); font-size:.75rem; text-align:center; }
+</style>
+</head>
+<body>
+
+<h1>Job Search Agent</h1>
+<p class="meta">Profile: <strong>Fraud Model Governance &amp; Automation | Bank of America</strong>
+  &nbsp;·&nbsp; Generated: 2026-03-21 16:04
+  &nbsp;·&nbsp; Stack: SAS | SQL | PySpark | Hive | Tableau | Python</p>
+
+<div class="summary">
+  <div class="stat"><div class="val">28</div><div class="lbl">Roles Found</div></div>
+  <div class="stat"><div class="val">7</div><div class="lbl">★★★★★ Matches</div></div>
+  <div class="stat"><div class="val">11</div><div class="lbl">Bulge Bracket</div></div>
+  <div class="stat"><div class="val">8</div><div class="lbl">Big 4 / Consulting</div></div>
+</div>
+
+<!-- Live Filters -->
+<div class="filters">
+  <h3>Filter Roles</h3>
+  <div class="filter-row">
+    <input id="kw" type="text" placeholder="Search by keyword (e.g. SAS, fraud, governance)…"
+           oninput="applyFilters()">
+    <select id="tier" onchange="applyFilters()">
+      <option value="">All Tiers</option>
+      <option value="Tier1">Tier 1 – Bulge Bracket</option>
+      <option value="Tier2">Tier 2 – International Banks</option>
+      <option value="Tier3">Tier 3 – Big 4 / Consulting</option>
+    </select>
+    <select id="stars" onchange="applyFilters()">
+      <option value="0">All Match Scores</option>
+      <option value="5">★★★★★ Only</option>
+      <option value="4">★★★★☆ and above</option>
+      <option value="3">★★★☆☆ and above</option>
+    </select>
+    <button class="btn btn-reset" onclick="resetFilters()">Reset</button>
+  </div>
+  <p id="count" style="margin-top:8px;color:var(--dim);font-size:.8rem;"></p>
+</div>
+
+<div class="tbl-wrap">
+<table id="jobTable">
+<thead>
+  <tr>
+    <th>#</th>
+    <th>Company</th>
+    <th>Role / Tags</th>
+    <th>Location</th>
+    <th>Tier</th>
+    <th>Match</th>
+    <th>Salary</th>
+    <th>Notes</th>
+    <th>Apply</th>
+  </tr>
+</thead>
+<tbody>
+
+        <tr>
+          <td class="num">1</td>
+          <td><strong>KPMG</strong></td>
+          <td>Senior Associate – Financial Crimes Data Analytics<br><small><span class="tag">SAS</span> <span class="tag">SQL</span> <span class="tag">Python</span> <span class="tag">Tableau</span> <span class="tag">fraud</span> <span class="tag">model governance</span> <span class="tag">AML</span></small></td>
+          <td>Multiple US Cities</td>
+          <td><span class="tier" style="background:#27ae60">Tier3</span></td>
+          <td class="stars">★★★★★</td>
+          <td>$95K–$130K est.</td>
+          <td class="notes">EXACT stack match: SAS, SQL, Python, Tableau. Model dev/validation/governance for fraud & AML.</td>
+          <td><a class="apply-btn" href="https://www.kpmguscareers.com/jobdetail/?jobId=126558" target="_blank">Apply ↗</a></td>
+        </tr>
+        <tr>
+          <td class="num">2</td>
+          <td><strong>Accenture</strong></td>
+          <td>Fraud Analytics Consultant (CFO&EV – Data & AI)<br><small><span class="tag">SAS</span> <span class="tag">Python</span> <span class="tag">SQL</span> <span class="tag">fraud</span> <span class="tag">model validation</span> <span class="tag">model governance</span> <span class="tag">Banking Fraud</span></small></td>
+          <td>US / India</td>
+          <td><span class="tier" style="background:#27ae60">Tier3</span></td>
+          <td class="stars">★★★★★</td>
+          <td>$100K–$140K est.</td>
+          <td class="notes">Model dev, validation, auditing, monitoring, governance + docs. SAS/Python/SQL required.</td>
+          <td><a class="apply-btn" href="https://builtin.com/job/sc-data-and-ai-cfoev-fraud-analytics-consultant/4688882" target="_blank">Apply ↗</a></td>
+        </tr>
+        <tr>
+          <td class="num">3</td>
+          <td><strong>Citi</strong></td>
+          <td>Fraud Business Analytics Senior Analyst<br><small><span class="tag">fraud</span> <span class="tag">analytics</span> <span class="tag">governance</span> <span class="tag">reporting</span> <span class="tag">SQL</span> <span class="tag">strategy</span></small></td>
+          <td>San Antonio, TX</td>
+          <td><span class="tier" style="background:#c0392b">Tier1</span></td>
+          <td class="stars">★★★★★</td>
+          <td>$85K–$115K est.</td>
+          <td class="notes">Fraud analytics + strategy, governance, reporting, performance monitoring. Credit card/synthetic ID fraud.</td>
+          <td><a class="apply-btn" href="https://jobs.citi.com/job/san-antonio/fraud-business-analytics-senior-analyst/287/91158135696" target="_blank">Apply ↗</a></td>
+        </tr>
+        <tr>
+          <td class="num">4</td>
+          <td><strong>Morgan Stanley</strong></td>
+          <td>MRM Governance Analyst – Financial Crimes<br><small><span class="tag">model risk</span> <span class="tag">model governance</span> <span class="tag">financial crimes</span> <span class="tag">validation</span> <span class="tag">MRM</span></small></td>
+          <td>New York, NY</td>
+          <td><span class="tier" style="background:#c0392b">Tier1</span></td>
+          <td class="stars">★★★★★</td>
+          <td>$90K–$150K est.</td>
+          <td class="notes">Sets model risk management standards globally. 2+ yrs financial crimes model validation/MRM required.</td>
+          <td><a class="apply-btn" href="https://www.morganstanley.com/careers/career-opportunities-search" target="_blank">Apply ↗</a></td>
+        </tr>
+        <tr>
+          <td class="num">5</td>
+          <td><strong>Barclays</strong></td>
+          <td>AVP – Lead Fraud Analyst<br><small><span class="tag">fraud</span> <span class="tag">model governance</span> <span class="tag">risk ratings</span> <span class="tag">controls</span> <span class="tag">documentation</span></small></td>
+          <td>Wilmington, DE (US)</td>
+          <td><span class="tier" style="background:#c0392b">Tier1</span></td>
+          <td class="stars">★★★★★</td>
+          <td>$90K–$120K est.</td>
+          <td class="notes">Manages fraud rules + models, partners with governance & control teams for docs, risk ratings, controls.</td>
+          <td><a class="apply-btn" href="https://builtin.com/job/avp-lead-fraud-analyst/3224198" target="_blank">Apply ↗</a></td>
+        </tr>
+        <tr>
+          <td class="num">6</td>
+          <td><strong>Goldman Sachs</strong></td>
+          <td>Transaction Banking – Risk Governance Analyst<br><small><span class="tag">risk governance</span> <span class="tag">reporting</span> <span class="tag">analytics</span> <span class="tag">framework</span></small></td>
+          <td>Dallas, TX</td>
+          <td><span class="tier" style="background:#c0392b">Tier1</span></td>
+          <td class="stars">★★★★★</td>
+          <td>$75K–$116K est.</td>
+          <td class="notes">Independent risk governance framework, risk reporting, metrics for management insight.</td>
+          <td><a class="apply-btn" href="https://www.goldmansachs.com/careers" target="_blank">Apply ↗</a></td>
+        </tr>
+        <tr>
+          <td class="num">7</td>
+          <td><strong>Goldman Sachs</strong></td>
+          <td>Fraud Team Lead / Analyst<br><small><span class="tag">fraud</span> <span class="tag">analytics</span> <span class="tag">team lead</span></small></td>
+          <td>Richardson, TX / Draper, UT</td>
+          <td><span class="tier" style="background:#c0392b">Tier1</span></td>
+          <td class="stars">★★★★★</td>
+          <td>$75K–$110K est.</td>
+          <td class="notes">Direct fraud analyst role at Goldman Sachs.</td>
+          <td><a class="apply-btn" href="https://www.goldmansachs.com/careers" target="_blank">Apply ↗</a></td>
+        </tr>
+        <tr>
+          <td class="num">8</td>
+          <td><strong>Citi</strong></td>
+          <td>In-Business Risk 1LOD Lead Analyst (Financial Crimes)<br><small><span class="tag">Python</span> <span class="tag">AML</span> <span class="tag">fraud</span> <span class="tag">financial crimes</span> <span class="tag">analytics</span></small></td>
+          <td>Tampa, FL</td>
+          <td><span class="tier" style="background:#c0392b">Tier1</span></td>
+          <td class="stars">★★★★☆</td>
+          <td>$85K–$115K est.</td>
+          <td class="notes">Python/R analytics for AML, sanctions, fraud detection. Financial crimes monitoring.</td>
+          <td><a class="apply-btn" href="https://jobs.citi.com/job/tampa/in-business-risk-1lod-lead-analyst/287/92603646864" target="_blank">Apply ↗</a></td>
+        </tr>
+        <tr>
+          <td class="num">9</td>
+          <td><strong>JPMorgan Chase</strong></td>
+          <td>Risk Management Full-Time Analyst<br><small><span class="tag">model validation</span> <span class="tag">risk management</span> <span class="tag">fraud</span> <span class="tag">Python</span></small></td>
+          <td>New York, NY</td>
+          <td><span class="tier" style="background:#c0392b">Tier1</span></td>
+          <td class="stars">★★★★☆</td>
+          <td>$112K–$151K</td>
+          <td class="notes">Consumer Risk, Model Validation (Quantitative Risk) tracks. Fraud Prevention & Recoveries roles open.</td>
+          <td><a class="apply-btn" href="https://www.jpmorganchase.com/careers/explore-opportunities" target="_blank">Apply ↗</a></td>
+        </tr>
+        <tr>
+          <td class="num">10</td>
+          <td><strong>NatWest Group</strong></td>
+          <td>Risk Analytics Associate<br><small><span class="tag">risk analytics</span> <span class="tag">governance</span> <span class="tag">quantitative</span> <span class="tag">regulatory reporting</span></small></td>
+          <td>Bangalore, India</td>
+          <td><span class="tier" style="background:#2980b9">Tier2</span></td>
+          <td class="stars">★★★★☆</td>
+          <td>Competitive</td>
+          <td class="notes">Quantitative analysis, governance & control activities, MI for incident management, regulatory reporting.</td>
+          <td><a class="apply-btn" href="https://jobs.natwestgroup.com/jobs/16099978-risk-analytics-associate" target="_blank">Apply ↗</a></td>
+        </tr>
+        <tr>
+          <td class="num">11</td>
+          <td><strong>Wells Fargo</strong></td>
+          <td>Senior Lead Analytics Consultant – Global Employee Fraud Monitoring<br><small><span class="tag">fraud</span> <span class="tag">analytics</span> <span class="tag">monitoring</span> <span class="tag">Python</span> <span class="tag">detection strategies</span></small></td>
+          <td>Chandler, AZ / Charlotte, NC / Wilmington, DE</td>
+          <td><span class="tier" style="background:#2980b9">Tier2</span></td>
+          <td class="stars">★★★★☆</td>
+          <td>$110K–$145K est.</td>
+          <td class="notes">Leads fraud analytics, monitoring, detection strategies. Python + analytics tools required.</td>
+          <td><a class="apply-btn" href="https://www.wellsfargojobs.com/en/jobs/r-528396/senior-lead-analytics-consultant-global-employee-fraud-monitoring/" target="_blank">Apply ↗</a></td>
+        </tr>
+        <tr>
+          <td class="num">12</td>
+          <td><strong>Nomura</strong></td>
+          <td>Risk Analyst – Market Risk / Portfolio & Model Management<br><small><span class="tag">model management</span> <span class="tag">risk analyst</span> <span class="tag">Python</span> <span class="tag">automation</span> <span class="tag">reporting</span></small></td>
+          <td>New York, NY</td>
+          <td><span class="tier" style="background:#2980b9">Tier2</span></td>
+          <td class="stars">★★★★☆</td>
+          <td>$90K–$130K est.</td>
+          <td class="notes">Cross-asset risk methodology, model enhancements, reporting/automation. Python + analytics.</td>
+          <td><a class="apply-btn" href="https://careers.nomura.com/Nomura/job/New-York-Risk-Analyst-NY-10019/1320039400/" target="_blank">Apply ↗</a></td>
+        </tr>
+        <tr>
+          <td class="num">13</td>
+          <td><strong>RBC Capital Markets</strong></td>
+          <td>Group Risk Management – Model Risk Analyst<br><small><span class="tag">model risk</span> <span class="tag">governance</span> <span class="tag">enterprise risk</span></small></td>
+          <td>Canada / New York</td>
+          <td><span class="tier" style="background:#2980b9">Tier2</span></td>
+          <td class="stars">★★★★☆</td>
+          <td>Competitive</td>
+          <td class="notes">Enterprise-wide oversight and governance of model risks.</td>
+          <td><a class="apply-btn" href="https://jobs.rbc.com/ca/en/groupriskmanagement" target="_blank">Apply ↗</a></td>
+        </tr>
+        <tr>
+          <td class="num">14</td>
+          <td><strong>Deloitte</strong></td>
+          <td>Risk & Financial Advisory Analyst<br><small><span class="tag">model risk</span> <span class="tag">fraud</span> <span class="tag">regulatory</span> <span class="tag">analytics</span> <span class="tag">advisory</span></small></td>
+          <td>Multiple US Cities</td>
+          <td><span class="tier" style="background:#27ae60">Tier3</span></td>
+          <td class="stars">★★★★☆</td>
+          <td>$117K avg ($89K–$156K range)</td>
+          <td class="notes">Model risk, fraud, regulatory risk advisory. AI/ML/analytics/automation across compliance lifecycle.</td>
+          <td><a class="apply-btn" href="https://www2.deloitte.com/us/en/pages/careers/articles/join-deloitte-advisory-analyst.html" target="_blank">Apply ↗</a></td>
+        </tr>
+        <tr>
+          <td class="num">15</td>
+          <td><strong>PwC</strong></td>
+          <td>Financial Risk & Regulatory – Market/Model Risk Analyst<br><small><span class="tag">model risk</span> <span class="tag">market risk</span> <span class="tag">regulatory</span> <span class="tag">financial services</span></small></td>
+          <td>Chicago, IL + US</td>
+          <td><span class="tier" style="background:#27ae60">Tier3</span></td>
+          <td class="stars">★★★★☆</td>
+          <td>$85K–$120K est.</td>
+          <td class="notes">Market/model risk advisory in financial services. 3,790 openings on Glassdoor.</td>
+          <td><a class="apply-btn" href="https://jobs.us.pwc.com/category/financial-risk-and-regulatory-jobs/932/64936/1" target="_blank">Apply ↗</a></td>
+        </tr>
+        <tr>
+          <td class="num">16</td>
+          <td><strong>Accenture</strong></td>
+          <td>Technology Management Consultant – Fraud & Financial Crime<br><small><span class="tag">fraud</span> <span class="tag">financial crime</span> <span class="tag">SAS</span> <span class="tag">Falcon</span> <span class="tag">technology consulting</span></small></td>
+          <td>UK / US</td>
+          <td><span class="tier" style="background:#27ae60">Tier3</span></td>
+          <td class="stars">★★★★☆</td>
+          <td>Competitive</td>
+          <td class="notes">Fraud/financial crime prevention, detection, response. SAS, Falcon, Featurespace, Actimize, Quantexa.</td>
+          <td><a class="apply-btn" href="https://www.consultancy.uk/jobs/35226/accenture/technology-management-consultant-fraud-and-financial-crime" target="_blank">Apply ↗</a></td>
+        </tr>
+        <tr>
+          <td class="num">17</td>
+          <td><strong>Citi</strong></td>
+          <td>Operational Risk Senior Analyst – New Account Fraud<br><small><span class="tag">fraud</span> <span class="tag">operational risk</span> <span class="tag">governance</span> <span class="tag">controls</span></small></td>
+          <td>Jacksonville, FL</td>
+          <td><span class="tier" style="background:#c0392b">Tier1</span></td>
+          <td class="stars">★★★★☆</td>
+          <td>$80K–$110K est.</td>
+          <td class="notes">Governance and oversight, technology operational risk, control environment assessment.</td>
+          <td><a class="apply-btn" href="https://jobs.citi.com/job/jacksonville/operational-risk-senior-analyst-new-account-fraud/287/91953256196" target="_blank">Apply ↗</a></td>
+        </tr>
+        <tr>
+          <td class="num">18</td>
+          <td><strong>JPMorgan Chase</strong></td>
+          <td>Payment Lifecycle Analyst – Fraud Prevention & Recoveries<br><small><span class="tag">fraud</span> <span class="tag">payments</span> <span class="tag">analytics</span> <span class="tag">recoveries</span></small></td>
+          <td>Indianapolis, IN</td>
+          <td><span class="tier" style="background:#c0392b">Tier1</span></td>
+          <td class="stars">★★★★☆</td>
+          <td>$80K–$110K est.</td>
+          <td class="notes">Fraud Prevention & Recoveries analyst role within payments.</td>
+          <td><a class="apply-btn" href="https://www.jpmorganchase.com/careers/explore-opportunities" target="_blank">Apply ↗</a></td>
+        </tr>
+        <tr>
+          <td class="num">19</td>
+          <td><strong>NatWest Group</strong></td>
+          <td>Business Analyst – Fraud Prevention, AVP<br><small><span class="tag">fraud</span> <span class="tag">business analyst</span> <span class="tag">AVP</span> <span class="tag">prevention</span></small></td>
+          <td>Gurugram, India</td>
+          <td><span class="tier" style="background:#2980b9">Tier2</span></td>
+          <td class="stars">★★★★☆</td>
+          <td>Competitive</td>
+          <td class="notes">AVP-level fraud prevention business analyst role.</td>
+          <td><a class="apply-btn" href="https://jobs.natwestgroup.com/jobs/17159147-business-analyst-fraud-prevention-avp" target="_blank">Apply ↗</a></td>
+        </tr>
+        <tr>
+          <td class="num">20</td>
+          <td><strong>NatWest Group</strong></td>
+          <td>Fraud Prevention Analyst<br><small><span class="tag">fraud</span> <span class="tag">statistical modelling</span> <span class="tag">data mining</span> <span class="tag">behavioral scoring</span> <span class="tag">monitoring</span></small></td>
+          <td>Southend-on-Sea, UK</td>
+          <td><span class="tier" style="background:#2980b9">Tier2</span></td>
+          <td class="stars">★★★★☆</td>
+          <td>Competitive</td>
+          <td class="notes">Performance monitoring of fraud strategies, statistical modelling, data mining, behavioral scoring.</td>
+          <td><a class="apply-btn" href="https://jobs.natwestgroup.com/jobs/16384855-fraud-prevention-analyst" target="_blank">Apply ↗</a></td>
+        </tr>
+        <tr>
+          <td class="num">21</td>
+          <td><strong>BNP Paribas</strong></td>
+          <td>2026 Full-Time Analyst – Global Markets CCCO Operational Risks & Permanent Control<br><small><span class="tag">operational risk</span> <span class="tag">governance</span> <span class="tag">control framework</span> <span class="tag">risk assessments</span></small></td>
+          <td>New York, NY</td>
+          <td><span class="tier" style="background:#2980b9">Tier2</span></td>
+          <td class="stars">★★★★☆</td>
+          <td>$85K–$110K est.</td>
+          <td class="notes">Control frameworks, risk assessments, remediation, operational risk governance.</td>
+          <td><a class="apply-btn" href="https://group.bnpparibas/en/careers/job-offer/2026-full-time-analyst-global-markets-ccco-operational-risks-permanent-control" target="_blank">Apply ↗</a></td>
+        </tr>
+        <tr>
+          <td class="num">22</td>
+          <td><strong>Nomura</strong></td>
+          <td>Risk & Control Analyst – CCO Governance & MI<br><small><span class="tag">governance</span> <span class="tag">MI</span> <span class="tag">risk control</span> <span class="tag">framework</span></small></td>
+          <td>Mumbai, India</td>
+          <td><span class="tier" style="background:#2980b9">Tier2</span></td>
+          <td class="stars">★★★★☆</td>
+          <td>Competitive</td>
+          <td class="notes">CCO Governance + MI capability build-out, risk management governance standardization globally.</td>
+          <td><a class="apply-btn" href="https://careers.nomura.com/Nomura/job/Mumbai-Risk-&-Control-Analyst/1287036400/" target="_blank">Apply ↗</a></td>
+        </tr>
+        <tr>
+          <td class="num">23</td>
+          <td><strong>HSBC</strong></td>
+          <td>Financial Crime Risk and Control Manager<br><small><span class="tag">financial crime</span> <span class="tag">risk</span> <span class="tag">controls</span> <span class="tag">governance</span></small></td>
+          <td>New York, NY</td>
+          <td><span class="tier" style="background:#c0392b">Tier1</span></td>
+          <td class="stars">★★★★☆</td>
+          <td>Competitive</td>
+          <td class="notes">Financial crime risk + control framework management.</td>
+          <td><a class="apply-btn" href="https://www.jobzmall.com/hsbc/job/financial-crime-risk-and-control-manager" target="_blank">Apply ↗</a></td>
+        </tr>
+        <tr>
+          <td class="num">24</td>
+          <td><strong>Barclays</strong></td>
+          <td>Fraud Analyst – Strategy & Model Governance<br><small><span class="tag">fraud</span> <span class="tag">model governance</span> <span class="tag">strategy</span> <span class="tag">analytics</span></small></td>
+          <td>US (Wilmington campus)</td>
+          <td><span class="tier" style="background:#c0392b">Tier1</span></td>
+          <td class="stars">★★★★☆</td>
+          <td>$80K–$110K est.</td>
+          <td class="notes">Data-driven fraud strategy, model + governance/control framework maintenance, change management.</td>
+          <td><a class="apply-btn" href="https://www.wayup.com/i-Banking-j-Fraud-Analyst-Barclays-225299924489659/" target="_blank">Apply ↗</a></td>
+        </tr>
+        <tr>
+          <td class="num">25</td>
+          <td><strong>EY</strong></td>
+          <td>Quant & Analytics Consultant – Financial Services Risk Consulting<br><small><span class="tag">quantitative models</span> <span class="tag">model validation</span> <span class="tag">AI governance</span> <span class="tag">risk consulting</span></small></td>
+          <td>US / Zurich</td>
+          <td><span class="tier" style="background:#27ae60">Tier3</span></td>
+          <td class="stars">★★★★☆</td>
+          <td>$90K–$155K est.</td>
+          <td class="notes">Review/develop quantitative models, validate models, AI governance frameworks, regulatory adherence.</td>
+          <td><a class="apply-btn" href="https://careers.ey.com/ey/job/Zurich-Quant-&-Analytics-Consultant-Financial-Services-Risk-Consulting-8005/1080228001/" target="_blank">Apply ↗</a></td>
+        </tr>
+        <tr>
+          <td class="num">26</td>
+          <td><strong>PwC</strong></td>
+          <td>Entry-Level Financial Crimes Data and Analytics Technology<br><small><span class="tag">financial crimes</span> <span class="tag">analytics</span> <span class="tag">AML</span> <span class="tag">fraud</span> <span class="tag">technology</span></small></td>
+          <td>Multiple US Cities</td>
+          <td><span class="tier" style="background:#27ae60">Tier3</span></td>
+          <td class="stars">★★★★☆</td>
+          <td>$85K–$120K est.</td>
+          <td class="notes">AML, sanctions, fraud + technology. Regulatory + investigative experience valued.</td>
+          <td><a class="apply-btn" href="https://jobs.us.pwc.com/financial-crimes-data-and-analytics-technology" target="_blank">Apply ↗</a></td>
+        </tr>
+        <tr>
+          <td class="num">27</td>
+          <td><strong>Deloitte</strong></td>
+          <td>Financial Crime Investigator – Junior Analyst (FTH)<br><small><span class="tag">AML</span> <span class="tag">KYC</span> <span class="tag">fraud</span> <span class="tag">financial crime</span></small></td>
+          <td>Bengaluru / Hyderabad / Pune, India</td>
+          <td><span class="tier" style="background:#27ae60">Tier3</span></td>
+          <td class="stars">★★★☆☆</td>
+          <td>Competitive</td>
+          <td class="notes">AML, KYC, Fraud Investigation, Financial Crime Compliance. Entry/junior level.</td>
+          <td><a class="apply-btn" href="https://usijobs.deloitte.com/en_US/careersUSI/JobDetail/USI-R-FA-FY-26-EH-FinCrime-Investigator-FTH-Junior-Analyst/307026" target="_blank">Apply ↗</a></td>
+        </tr>
+        <tr>
+          <td class="num">28</td>
+          <td><strong>Macquarie Group</strong></td>
+          <td>2026 Risk Management Group Graduate Programme<br><small><span class="tag">risk management</span> <span class="tag">governance</span> <span class="tag">graduate programme</span></small></td>
+          <td>Global</td>
+          <td><span class="tier" style="background:#2980b9">Tier2</span></td>
+          <td class="stars">★★★☆☆</td>
+          <td>Competitive</td>
+          <td class="notes">Risk governance, model risk. Graduate entry programme.</td>
+          <td><a class="apply-btn" href="https://www.brightnetwork.co.uk/graduate-jobs/macquarie/risk-management-group-graduate-programme-2026" target="_blank">Apply ↗</a></td>
+        </tr>
+</tbody>
+</table>
+</div>
+
+<!-- Job Board Quick-Search Links -->
+<div class="jb-section">
+  <h2>Quick Search on Job Boards</h2>
+  <div class="jb-grid">
+    
+        <div class="jb-card">
+          <div class="co">LinkedIn</div>
+          <div style="color:#aaa;font-size:.78rem">fraud model governance analyst</div>
+          <a href="https://www.linkedin.com/jobs/search/?keywords=fraud+model+governance+analyst" target="_blank">Search ↗</a>
+        </div>
+        <div class="jb-card">
+          <div class="co">LinkedIn</div>
+          <div style="color:#aaa;font-size:.78rem">model risk governance analyst fraud</div>
+          <a href="https://www.linkedin.com/jobs/search/?keywords=model+risk+governance+analyst+fraud" target="_blank">Search ↗</a>
+        </div>
+        <div class="jb-card">
+          <div class="co">LinkedIn</div>
+          <div style="color:#aaa;font-size:.78rem">fraud analytics analyst SAS SQL</div>
+          <a href="https://www.linkedin.com/jobs/search/?keywords=fraud+analytics+analyst+SAS+SQL" target="_blank">Search ↗</a>
+        </div>
+        <div class="jb-card">
+          <div class="co">Indeed</div>
+          <div style="color:#aaa;font-size:.78rem">model performance monitoring fraud</div>
+          <a href="https://www.indeed.com/jobs?q=model+performance+monitoring+fraud" target="_blank">Search ↗</a>
+        </div>
+        <div class="jb-card">
+          <div class="co">Indeed</div>
+          <div style="color:#aaa;font-size:.78rem">financial crime model analyst</div>
+          <a href="https://www.indeed.com/jobs?q=financial+crime+model+analyst" target="_blank">Search ↗</a>
+        </div>
+        <div class="jb-card">
+          <div class="co">Indeed</div>
+          <div style="color:#aaa;font-size:.78rem">model risk management fraud SAS</div>
+          <a href="https://www.indeed.com/jobs?q=model+risk+management+fraud+SAS" target="_blank">Search ↗</a>
+        </div>
+        <div class="jb-card">
+          <div class="co">Glassdoor</div>
+          <div style="color:#aaa;font-size:.78rem">fraud model governance analyst</div>
+          <a href="https://www.glassdoor.com/Job/jobs.htm?sc.keyword=fraud+model+governance+analyst" target="_blank">Search ↗</a>
+        </div>
+        <div class="jb-card">
+          <div class="co">Glassdoor</div>
+          <div style="color:#aaa;font-size:.78rem">model validation analyst fraud</div>
+          <a href="https://www.glassdoor.com/Job/jobs.htm?sc.keyword=model+validation+analyst+fraud" target="_blank">Search ↗</a>
+        </div>
+        <div class="jb-card">
+          <div class="co">eFinancialCareers</div>
+          <div style="color:#aaa;font-size:.78rem">fraud model governance analyst</div>
+          <a href="https://www.efinancialcareers.com/search?q=fraud+model+governance+analyst" target="_blank">Search ↗</a>
+        </div>
+  </div>
+</div>
+
+<footer>Auto-generated by job_search.py · Refresh weekly · Data as of 2026-03-21</footer>
+
+<script>
+function applyFilters() {
+  const kw   = document.getElementById('kw').value.toLowerCase();
+  const tier = document.getElementById('tier').value;
+  const stars= parseInt(document.getElementById('stars').value) || 0;
+  const rows = document.querySelectorAll('#jobTable tbody tr');
+  let vis = 0;
+  rows.forEach(r => {
+    const text   = r.innerText.toLowerCase();
+    const rowTier = r.querySelector('.tier')?.innerText || '';
+    const rowStar = r.querySelectorAll('.stars')[0]?.innerText.split('★').length - 1 || 0;
+    const match  = (!kw || text.includes(kw))
+                && (!tier || rowTier === tier)
+                && (rowStar >= stars);
+    r.classList.toggle('hidden', !match);
+    if (match) vis++;
+  });
+  document.getElementById('count').innerText = vis + ' role(s) visible';
+}
+function resetFilters() {
+  document.getElementById('kw').value = '';
+  document.getElementById('tier').value = '';
+  document.getElementById('stars').value = '0';
+  applyFilters();
+}
+window.onload = () => applyFilters();
+</script>
+</body>
+</html>
