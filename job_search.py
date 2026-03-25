@@ -2,16 +2,51 @@
 """
 Job Search Agent – Fraud Model Governance & Risk Roles
 Profile: Automation Analyst, Fraud Model Governance, Bank of America
-Run:  python3 job_search.py
+
+Run:                python3 job_search.py
+Get your chat ID:   python3 job_search.py --chatid
+Skip Telegram:      python3 job_search.py --no-telegram
+
+Telegram setup:
+  1. Message @BotFather → /newbot → copy the token
+  2. Run:  python3 job_search.py --chatid   (follow the prompt to get your chat ID)
+  3. Set:  export TELEGRAM_TOKEN="..."  TELEGRAM_CHAT_ID="..."
+     Or put them in a .env file in this directory.
 """
 
 import urllib.parse
+import urllib.request
 import webbrowser
 import json
 import os
+import sys
+import time
 from datetime import datetime
 from dataclasses import dataclass, field
-from typing import List
+from typing import List, Optional
+
+# ─────────────────────────────────────────────
+#  TELEGRAM CONFIG
+#  Set via environment variables or .env file:
+#    TELEGRAM_TOKEN   = your bot token from @BotFather
+#    TELEGRAM_CHAT_ID = your personal chat ID
+# ─────────────────────────────────────────────
+def _load_env():
+    """Load .env file if present (no external deps needed)."""
+    env_path = os.path.join(os.path.dirname(__file__), ".env")
+    if os.path.exists(env_path):
+        with open(env_path) as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith("#") and "=" in line:
+                    k, v = line.split("=", 1)
+                    os.environ.setdefault(k.strip(), v.strip().strip('"').strip("'"))
+
+_load_env()
+
+TELEGRAM_TOKEN   = os.environ.get("TELEGRAM_TOKEN", "")
+TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "")
+TELEGRAM_API     = "https://api.telegram.org/bot{token}/{method}"
 
 # ─────────────────────────────────────────────
 #  PROFILE CONFIG — edit this section to update
@@ -598,27 +633,174 @@ def _jobboard_links() -> str:
 
 
 # ─────────────────────────────────────────────
+#  TELEGRAM INTEGRATION
+# ─────────────────────────────────────────────
+def _tg_request(method: str, payload: dict) -> dict:
+    """Make a Telegram Bot API request (no external deps)."""
+    url  = TELEGRAM_API.format(token=TELEGRAM_TOKEN, method=method)
+    data = json.dumps(payload).encode("utf-8")
+    req  = urllib.request.Request(
+        url, data=data,
+        headers={"Content-Type": "application/json"},
+        method="POST"
+    )
+    with urllib.request.urlopen(req, timeout=10) as resp:
+        return json.loads(resp.read().decode())
+
+
+def telegram_get_chat_id() -> None:
+    """Helper: prints the chat ID after you send /start to your bot."""
+    if not TELEGRAM_TOKEN:
+        print("\n ERROR: TELEGRAM_TOKEN not set.")
+        print("  Set it with:  export TELEGRAM_TOKEN='your_token_here'\n")
+        return
+
+    print("\n──────────────────────────────────────────")
+    print(" HOW TO GET YOUR CHAT ID")
+    print("──────────────────────────────────────────")
+    print(f" 1. Open Telegram and search for your bot")
+    print(f" 2. Send it the message:  /start")
+    print(f" 3. Come back here — checking for messages…\n")
+
+    deadline = time.time() + 60
+    seen: set = set()
+    while time.time() < deadline:
+        try:
+            result = _tg_request("getUpdates", {})
+            for upd in result.get("result", []):
+                uid = upd.get("update_id")
+                if uid in seen:
+                    continue
+                seen.add(uid)
+                msg  = upd.get("message") or upd.get("channel_post", {})
+                chat = msg.get("chat", {})
+                cid  = chat.get("id")
+                name = chat.get("first_name") or chat.get("title") or "?"
+                if cid:
+                    print(f" ✓ Found!  Chat ID = {cid}  (name: {name})")
+                    print(f"\n Now set it permanently:")
+                    print(f"   export TELEGRAM_CHAT_ID='{cid}'")
+                    print(f"\n Or add to .env file:")
+                    print(f"   TELEGRAM_CHAT_ID={cid}\n")
+                    return
+        except Exception as e:
+            print(f"   [polling error: {e}]")
+        time.sleep(2)
+
+    print(" Timed out. Make sure you sent /start to your bot and try again.\n")
+
+
+def telegram_send_jobs(jobs: List[Job]) -> None:
+    """Send filtered job results to Telegram with Apply buttons."""
+    if not TELEGRAM_TOKEN or not TELEGRAM_CHAT_ID:
+        print("\n [Telegram] Skipped — TELEGRAM_TOKEN or TELEGRAM_CHAT_ID not set.")
+        print("  Run:  python3 job_search.py --chatid   to get your chat ID\n")
+        return
+
+    tier_emoji = {"Tier1": "🏦", "Tier2": "🌐", "Tier3": "🏢"}
+    stars_map  = {5: "⭐⭐⭐⭐⭐", 4: "⭐⭐⭐⭐", 3: "⭐⭐⭐"}
+
+    # ── Header message ─────────────────────────────────────────────────
+    header = (
+        f"🔍 <b>Job Search Results</b>\n"
+        f"📅 {datetime.now().strftime('%d %b %Y, %H:%M')}\n"
+        f"👤 Fraud Model Governance | BofA\n"
+        f"📊 <b>{len(jobs)} roles found</b>\n\n"
+        f"Top picks sorted by profile match ↓"
+    )
+    try:
+        _tg_request("sendMessage", {
+            "chat_id":    TELEGRAM_CHAT_ID,
+            "text":       header,
+            "parse_mode": "HTML",
+        })
+    except Exception as e:
+        print(f" [Telegram] Failed to send header: {e}")
+        return
+
+    time.sleep(0.4)   # respect rate limit
+
+    # ── One card per job ────────────────────────────────────────────────
+    for i, j in enumerate(jobs, 1):
+        emoji = tier_emoji.get(j.tier, "🏢")
+        stars = stars_map.get(j.match, "⭐⭐⭐")
+        tags  = " · ".join(j.tags[:5]) if j.tags else ""
+
+        text = (
+            f"{emoji} <b>{i}. {j.company}</b>\n"
+            f"📌 {j.title}\n"
+            f"📍 {j.location}\n"
+            f"{stars}  |  {j.tier}"
+            + (f"\n💰 {j.salary}" if j.salary else "")
+            + (f"\n🏷 <i>{tags}</i>" if tags else "")
+            + (f"\n💬 {j.notes}" if j.notes else "")
+        )
+
+        payload: dict = {
+            "chat_id":    TELEGRAM_CHAT_ID,
+            "text":       text,
+            "parse_mode": "HTML",
+            "reply_markup": {
+                "inline_keyboard": [[
+                    {"text": "Apply Now ↗", "url": j.url}
+                ]]
+            },
+        }
+
+        try:
+            _tg_request("sendMessage", payload)
+        except Exception as e:
+            print(f" [Telegram] Failed for job {i} ({j.company}): {e}")
+
+        time.sleep(0.35)   # ~3 msg/sec to stay within Telegram limits
+
+    # ── Footer ──────────────────────────────────────────────────────────
+    try:
+        _tg_request("sendMessage", {
+            "chat_id":    TELEGRAM_CHAT_ID,
+            "text":       f"✅ Done! {len(jobs)} jobs sent. Tap <b>Apply Now</b> on any card above to open the listing.",
+            "parse_mode": "HTML",
+        })
+        print(f" [Telegram] ✓ {len(jobs)} jobs sent to your chat.\n")
+    except Exception as e:
+        print(f" [Telegram] Footer error: {e}")
+
+
+# ─────────────────────────────────────────────
 #  MAIN
 # ─────────────────────────────────────────────
 def main():
+    args = sys.argv[1:]
+
+    # Helper mode: get chat ID
+    if "--chatid" in args:
+        telegram_get_chat_id()
+        return
+
+    send_telegram = "--no-telegram" not in args
+
     print("\n[Job Search Agent] Filtering roles against your profile…")
 
     filtered = filter_jobs(JOBS, FILTERS)
-
     print_terminal(filtered)
 
     html_path = os.path.join(os.path.dirname(__file__), "job_results_filtered.html")
     save_html(filtered, html_path)
-
     print(f"\n HTML report saved → {html_path}")
-    print(f" {len(filtered)} jobs listed with direct Apply links.\n")
 
     # Auto-open in browser
     try:
         webbrowser.open(f"file://{os.path.abspath(html_path)}")
-        print(" Opening in browser…\n")
+        print(" Opening in browser…")
     except Exception:
-        print(f" Open manually: file://{os.path.abspath(html_path)}\n")
+        print(f" Open manually: file://{os.path.abspath(html_path)}")
+
+    # Send to Telegram
+    if send_telegram:
+        print("\n[Telegram] Sending jobs to your chat…")
+        telegram_send_jobs(filtered)
+
+    print(f" Done. {len(filtered)} jobs listed.\n")
 
 
 if __name__ == "__main__":
