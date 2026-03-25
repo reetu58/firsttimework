@@ -284,7 +284,7 @@ FILTERS = {
     "min_match":  3,             # minimum star rating (1–5)
     "tiers":      ["Tier1", "Tier2", "Tier3"],
     "keywords":   [],            # leave empty = no keyword filter
-    "locations":  [],            # e.g. ["US", "New York"] — leave empty = all
+    "locations":  ["India"],     # only India-based openings
     "exclude":    [],            # companies to exclude
 }
 
