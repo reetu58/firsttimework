@@ -275,6 +275,86 @@ JOBS = [
         "Risk governance, model risk. Graduate entry programme.",
         "Competitive",
         ["risk management", "governance", "graduate programme"]),
+
+    # ── American Express ──────────────────────────────────────────────
+    Job("American Express", "Senior Analyst – Fraud Risk Decision Science",
+        "Gurugram, India", "Tier1", 5,
+        "https://aexp.eightfold.ai/careers/job/25161698",
+        "Build & monitor fraud detection models, score analysis, capture rate/false positive tuning. SAS/SQL/Python stack.",
+        "₹18L–₹28L est.",
+        ["fraud", "model monitoring", "SAS", "SQL", "Python", "capture rate", "false positive", "decision science"]),
+
+    Job("American Express", "Analyst – Risk & Information Management (RIM)",
+        "Gurugram, India", "Tier1", 5,
+        "https://aexp.eightfold.ai/careers/job/25161697",
+        "Risk reporting, model performance dashboards, Tableau/SQL. Regulatory MI, score band analysis.",
+        "₹12L–₹18L est.",
+        ["risk", "reporting", "Tableau", "SQL", "model performance", "score band", "regulatory reporting"]),
+
+    Job("American Express", "Analyst – Model Risk Management",
+        "Gurugram, India", "Tier1", 5,
+        "https://aexp.eightfold.ai/careers/job/25111091",
+        "Independent model validation, SR 11-7 / OCC 2011-12 compliance, governance documentation for fraud & credit models.",
+        "₹14L–₹22L est.",
+        ["model risk", "model validation", "SR 11-7", "OCC 2011-12", "governance", "fraud"]),
+
+    Job("American Express", "Senior Analyst – Global Fraud Analytics",
+        "Gurugram / Bengaluru, India", "Tier1", 5,
+        "https://aexp.eightfold.ai/careers/job/25043210",
+        "Fraud strategy analytics, rule & model performance monitoring, executive reporting. Hive/PySpark environment.",
+        "₹18L–₹28L est.",
+        ["fraud", "analytics", "PySpark", "Hive", "model performance monitoring", "executive reporting"]),
+
+    # ── Visa ──────────────────────────────────────────────────────────
+    Job("Visa", "Data Science Analyst – Fraud & Authorization",
+        "Bengaluru, India", "Tier1", 5,
+        "https://jobs.smartrecruiters.com/Visa/744000050023849-data-science-analyst-fraud-authorization",
+        "Develop & monitor transaction fraud models (neural nets + rule-based), Python/SQL/Spark. Model governance docs required.",
+        "₹20L–₹32L est.",
+        ["fraud", "data science", "Python", "SQL", "Spark", "model governance", "transaction fraud"]),
+
+    Job("Visa", "Senior Analyst – Risk Operations & Model Governance",
+        "Bengaluru / Pune, India", "Tier1", 5,
+        "https://jobs.smartrecruiters.com/Visa/743999992733215-sr-analyst-risk-operations",
+        "Risk model governance framework, MRM documentation, performance tracking dashboards, regulatory adherence.",
+        "₹18L–₹28L est.",
+        ["model governance", "risk operations", "MRM", "documentation", "regulatory", "dashboard"]),
+
+    Job("Visa", "Business Analyst – Fraud Product & Strategy",
+        "Bengaluru, India", "Tier1", 4,
+        "https://jobs.smartrecruiters.com/Visa/743999997654312-business-analyst-fraud",
+        "Fraud product strategy, data analysis, stakeholder reporting, SQL/Tableau, cross-functional governance.",
+        "₹14L–₹22L est.",
+        ["fraud", "business analyst", "SQL", "Tableau", "strategy", "governance"]),
+
+    # ── Mastercard ────────────────────────────────────────────────────
+    Job("Mastercard", "Analyst – Data Science & Fraud Intelligence",
+        "Pune, India", "Tier1", 5,
+        "https://careers.mastercard.com/us/en/job/R-228765/Analyst-Data-Science",
+        "Build fraud detection models, monitor performance, Python/SQL/SAS. Work with model governance & compliance teams.",
+        "₹16L–₹26L est.",
+        ["fraud", "data science", "Python", "SQL", "SAS", "model governance", "fraud detection"]),
+
+    Job("Mastercard", "Analyst – Risk Analytics & Model Performance",
+        "Pune / Vadodara, India", "Tier1", 5,
+        "https://careers.mastercard.com/us/en/job/R-229103/Analyst-Risk-Analytics",
+        "Model performance monitoring, score band tracking, false positive analysis, Tableau dashboards, governance reporting.",
+        "₹14L–₹22L est.",
+        ["model performance monitoring", "score band", "false positive", "Tableau", "governance reporting", "risk analytics"]),
+
+    Job("Mastercard", "Senior Analyst – Cyber & Intelligence (Fraud Risk)",
+        "Pune, India", "Tier1", 5,
+        "https://careers.mastercard.com/us/en/job/R-227544/Senior-Analyst-Cyber-Intelligence",
+        "Transaction fraud risk, model governance, regulatory risk frameworks, stakeholder analytics reporting.",
+        "₹20L–₹32L est.",
+        ["fraud risk", "model governance", "regulatory", "analytics", "reporting", "cyber intelligence"]),
+
+    Job("Mastercard", "Manager – Decision Science (Fraud Models)",
+        "Pune, India", "Tier1", 4,
+        "https://careers.mastercard.com/us/en/job/R-224819/Manager-Decision-Science",
+        "Leads fraud model development + validation team. PySpark, Python, SAS. Governance docs + model risk frameworks.",
+        "₹28L–₹45L est.",
+        ["fraud", "decision science", "PySpark", "Python", "SAS", "model validation", "model risk"]),
 ]
 
 # ─────────────────────────────────────────────
