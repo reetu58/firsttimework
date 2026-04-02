@@ -1,10 +1,6 @@
 'use client';
 import { TrafficSeverity } from '../types';
 
-const SEVERITY_EMOJI: Record<TrafficSeverity, string> = {
-  clear: '🟢', light: '🟡', moderate: '🟠', heavy: '🔴', standstill: '⛔',
-};
-
 interface Props {
   stops: Array<{ emoji: string; name: string }>;
   totalDuration: number;
@@ -23,49 +19,80 @@ function formatDuration(mins: number): string {
   return h > 0 ? `${h}h ${m}m` : `${m}m`;
 }
 
+const SEVERITY_DOT: Record<TrafficSeverity, string> = {
+  clear: 'severity-clear',
+  light: 'severity-light',
+  moderate: 'severity-moderate',
+  heavy: 'severity-heavy',
+  standstill: 'severity-standstill',
+};
+
 export default function TrafficSummaryBar({
   stops, totalDuration, totalTravelTime, totalTrafficOverhead,
   totalCost, overallSeverity, onRefresh, onShare, isRefreshing,
 }: Props) {
   return (
-    <div className="sticky top-16 z-40 bg-white shadow-md border-b px-4 py-3">
+    <div className="sticky top-16 z-40 glass border-b border-slate-200/50 px-4 py-3">
       <div className="max-w-5xl mx-auto">
-        <div className="flex flex-wrap items-center gap-2 text-sm mb-2">
+        {/* Route visualization */}
+        <div className="flex items-center gap-1.5 mb-2 overflow-x-auto hide-scrollbar">
           {stops.map((s, i) => (
-            <span key={i} className="flex items-center gap-1">
-              {i > 0 && <span className="text-gray-400">→</span>}
-              <span>{s.emoji} {s.name}</span>
+            <span key={i} className="flex items-center gap-1.5 flex-shrink-0">
+              {i > 0 && (
+                <svg width="12" height="12" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-slate-300" viewBox="0 0 12 12">
+                  <path d="M2 6h8M7 3l3 3-3 3" />
+                </svg>
+              )}
+              <span className="text-xs font-medium text-slate-600 bg-white px-2 py-1 rounded-lg border border-slate-100">
+                {s.emoji} {s.name}
+              </span>
             </span>
           ))}
         </div>
-        <div className="flex flex-wrap items-center gap-3 text-sm">
-          <span className="font-semibold text-[#1B4965]">
-            Total: {formatDuration(totalDuration)}
+
+        {/* Stats row */}
+        <div className="flex items-center gap-4 text-xs flex-wrap">
+          <div className="flex items-center gap-1.5">
+            <span className="font-bold text-primary">{formatDuration(totalDuration)}</span>
+            <span className="text-slate-400">total</span>
+          </div>
+
+          <div className="w-px h-3 bg-slate-200" />
+
+          <div className="flex items-center gap-1.5">
+            <span className={`severity-dot ${SEVERITY_DOT[overallSeverity]}`} />
+            <span className="text-slate-500">{formatDuration(totalTravelTime)} travel</span>
+            {totalTrafficOverhead > 0 && (
+              <span className={`font-semibold ${totalTrafficOverhead > 10 ? 'text-red-500' : 'text-amber-500'}`}>
+                +{totalTrafficOverhead}m
+              </span>
+            )}
+          </div>
+
+          <div className="w-px h-3 bg-slate-200" />
+
+          <span className="text-slate-500">
+            {totalCost.min === 0 && totalCost.max === 0 ? 'Free' : `₹${totalCost.min}-${totalCost.max}`}
           </span>
-          <span className="text-gray-400">|</span>
-          <span>
-            Travel: {formatDuration(totalTravelTime)}{' '}
-            <span className={totalTrafficOverhead > 10 ? 'text-red-500 font-semibold' : 'text-yellow-600'}>
-              ({SEVERITY_EMOJI[overallSeverity]} +{totalTrafficOverhead} min)
-            </span>
-          </span>
-          <span className="text-gray-400">|</span>
-          <span>
-            Cost: ₹{totalCost.min === 0 && totalCost.max === 0 ? 'Free' : `${totalCost.min}-${totalCost.max}`}
-          </span>
+
           <div className="flex gap-2 ml-auto">
             <button
               onClick={onRefresh}
               disabled={isRefreshing}
-              className="px-3 py-1 bg-[#1B4965] text-white rounded-full text-xs hover:bg-[#15384f] disabled:opacity-50"
+              className="px-3 py-1.5 bg-primary text-white rounded-lg text-[11px] font-semibold hover:bg-primary-light transition-colors disabled:opacity-50"
             >
-              {isRefreshing ? '⏳ Refreshing...' : '🔄 Refresh Traffic'}
+              {isRefreshing ? (
+                <span className="flex items-center gap-1">
+                  <span className="w-3 h-3 border-1.5 border-white/30 border-t-white rounded-full animate-spin" />
+                  Refreshing
+                </span>
+              ) : 'Refresh'}
             </button>
             <button
               onClick={onShare}
-              className="px-3 py-1 bg-[#FFB703] text-[#1B4965] rounded-full text-xs font-semibold hover:bg-[#e5a503]"
+              className="px-3 py-1.5 bg-gradient-to-r from-amber-400 to-amber-500 text-primary rounded-lg text-[11px] font-bold hover:shadow-glow transition-all"
             >
-              📤 Share
+              Share
             </button>
           </div>
         </div>

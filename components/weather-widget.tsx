@@ -27,9 +27,14 @@ export default function WeatherWidget() {
 
   if (loading) {
     return (
-      <div className="bg-white/80 backdrop-blur rounded-2xl p-6 animate-pulse">
-        <div className="h-12 w-32 bg-gray-200 rounded mb-2" />
-        <div className="h-4 w-48 bg-gray-200 rounded" />
+      <div className="card-premium p-5">
+        <div className="flex items-center gap-4">
+          <div className="skeleton w-14 h-14 rounded-2xl" />
+          <div className="space-y-2 flex-1">
+            <div className="skeleton h-6 w-20" />
+            <div className="skeleton h-3 w-32" />
+          </div>
+        </div>
       </div>
     );
   }
@@ -37,32 +42,52 @@ export default function WeatherWidget() {
   if (!weather) return null;
 
   return (
-    <div className="bg-white/80 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/50">
-      <div className="flex items-center gap-4 flex-wrap">
-        <span className="text-5xl">{weather.icon}</span>
-        <div>
-          <p className="text-4xl font-bold text-[#1B4965]">{weather.temperature}°C</p>
-          <p className="text-gray-600">{weather.condition}</p>
+    <div className="card-premium p-5">
+      <div className="flex items-center justify-between mb-3">
+        <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">
+          Chennai Weather
+        </h3>
+        <span className="text-[10px] font-medium text-slate-400 bg-slate-50 px-2 py-1 rounded-full">
+          {weather.isLive ? 'Live' : 'Estimated'}
+        </span>
+      </div>
+
+      <div className="flex items-center gap-4">
+        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-50 to-orange-50 flex items-center justify-center text-3xl">
+          {weather.icon}
         </div>
-        <div className="flex gap-4 text-sm text-gray-500 ml-auto">
-          <span>💧 {weather.humidity}%</span>
-          <span>🌧️ {weather.rainChance}%</span>
-          <span>💨 {weather.windSpeed} km/h</span>
+        <div className="flex-1">
+          <p className="text-3xl font-bold text-primary">{weather.temperature}°</p>
+          <p className="text-sm text-slate-500">{weather.condition}</p>
+        </div>
+        <div className="flex flex-col gap-1.5 text-xs text-slate-500">
+          <span className="flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-blue-300" />
+            {weather.humidity}% humidity
+          </span>
+          <span className="flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-cyan-300" />
+            {weather.rainChance}% rain
+          </span>
+          <span className="flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-slate-300" />
+            {weather.windSpeed} km/h
+          </span>
         </div>
       </div>
+
       {weather.rainChance > 60 && (
-        <p className="mt-3 text-sm text-orange-600 bg-orange-50 rounded-lg px-3 py-2">
-          🌧️ High chance of rain — consider indoor activities!
-        </p>
+        <div className="mt-3 flex items-center gap-2 text-xs text-amber-700 bg-amber-50 rounded-xl px-3 py-2.5 border border-amber-100">
+          <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+          High chance of rain — consider indoor activities
+        </div>
       )}
       {weather.temperature > 38 && (
-        <p className="mt-3 text-sm text-red-600 bg-red-50 rounded-lg px-3 py-2">
-          🔥 Extreme heat — prefer indoor spots between 12-4 PM
-        </p>
+        <div className="mt-3 flex items-center gap-2 text-xs text-red-700 bg-red-50 rounded-xl px-3 py-2.5 border border-red-100">
+          <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse" />
+          Extreme heat — prefer indoor spots between 12-4 PM
+        </div>
       )}
-      <p className="text-xs text-gray-400 mt-2">
-        {weather.isLive ? '📡 Live weather' : '📊 Estimated'}
-      </p>
     </div>
   );
 }

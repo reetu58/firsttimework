@@ -21,7 +21,6 @@ export default function ItineraryPage() {
   useEffect(() => {
     async function load() {
       try {
-        // Try fetching from API first
         const res = await fetch(`/api/plan?id=${id}`);
         if (res.ok) {
           const data = await res.json();
@@ -30,13 +29,11 @@ export default function ItineraryPage() {
         }
       } catch {}
 
-      // Try decoding from URL param (base64 encoded prefs)
       try {
         const decoded = JSON.parse(atob(id as string));
         if (decoded.stops) {
           setItinerary(decoded);
         } else {
-          // It's prefs, generate itinerary client-side
           const res = await fetch('/api/plan', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -44,14 +41,11 @@ export default function ItineraryPage() {
           });
           if (res.ok) {
             const data = await res.json();
-            // Fetch the generated itinerary
             const iRes = await fetch(`/api/plan?id=${data.id}`);
             if (iRes.ok) setItinerary(await iRes.json());
           }
         }
-      } catch {
-        // Failed to decode
-      }
+      } catch {}
       setLoading(false);
     }
     load().finally(() => setLoading(false));
@@ -59,16 +53,18 @@ export default function ItineraryPage() {
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
-    // In a real app, this would re-fetch traffic for all legs
     setTimeout(() => setIsRefreshing(false), 2000);
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#FAF7F2] flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin text-4xl mb-4">🔄</div>
-          <p className="text-[#1B4965] font-semibold">Building your traffic-smart plan...</p>
+      <div className="min-h-screen bg-sand flex items-center justify-center">
+        <div className="text-center animate-fade-in">
+          <div className="w-16 h-16 rounded-2xl bg-primary mx-auto mb-4 flex items-center justify-center">
+            <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+          </div>
+          <p className="text-primary font-semibold text-sm">Building your traffic-smart plan...</p>
+          <p className="text-slate-400 text-xs mt-1">Checking routes and optimizing</p>
         </div>
       </div>
     );
@@ -76,11 +72,16 @@ export default function ItineraryPage() {
 
   if (!itinerary) {
     return (
-      <div className="min-h-screen bg-[#FAF7F2] flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-2xl mb-4">😕</p>
-          <h2 className="text-xl font-bold text-[#1B4965] mb-2">Plan not found</h2>
-          <Link href="/plan" className="text-[#FFB703] underline">Create a new plan</Link>
+      <div className="min-h-screen bg-sand flex items-center justify-center">
+        <div className="text-center card-premium p-10 max-w-sm mx-4">
+          <div className="w-14 h-14 rounded-2xl bg-slate-100 flex items-center justify-center text-2xl mx-auto mb-4">
+            ?
+          </div>
+          <h2 className="text-lg font-bold text-primary mb-2">Plan not found</h2>
+          <p className="text-sm text-slate-400 mb-6">This plan may have expired or the link is invalid.</p>
+          <Link href="/plan" className="btn-primary inline-block text-sm px-6 py-3">
+            Create New Plan
+          </Link>
         </div>
       </div>
     );
@@ -93,7 +94,7 @@ export default function ItineraryPage() {
   const shareUrl = typeof window !== 'undefined' ? window.location.href : '';
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2]">
+    <div className="min-h-screen bg-sand">
       <TrafficSummaryBar
         stops={itinerary.stops.map(s => ({
           emoji: CATEGORY_ICONS[s.place.category],
@@ -110,10 +111,10 @@ export default function ItineraryPage() {
       />
 
       {showShare && (
-        <div className="max-w-5xl mx-auto px-4 py-4">
+        <div className="max-w-5xl mx-auto px-4 pt-4 animate-fade-in">
           <ShareButtons
             title="My Chennai Weekend Plan | Weekendaa"
-            text={`Just planned my weekend with weekendaa — ${itinerary.stops.length} stops, traffic-optimized! 🚗💨`}
+            text={`Just planned my weekend with Weekendaa — ${itinerary.stops.length} stops, traffic-optimized!`}
             url={shareUrl}
           />
         </div>
@@ -122,46 +123,53 @@ export default function ItineraryPage() {
       <div className="max-w-5xl mx-auto px-4 py-6">
         <div className="lg:grid lg:grid-cols-5 lg:gap-6">
           {/* Itinerary Timeline */}
-          <div className="lg:col-span-3 space-y-4">
-            <div className="flex items-center justify-between mb-4">
-              <h1 className="text-2xl font-bold text-[#1B4965]">Your Weekend Plan</h1>
-              <span className="text-sm text-gray-500">
-                {new Date(itinerary.createdAt).toLocaleDateString('en-IN', { weekday: 'long', month: 'short', day: 'numeric' })}
+          <div className="lg:col-span-3">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h1 className="text-xl font-bold text-primary">Your Weekend Plan</h1>
+                <p className="text-xs text-slate-400 mt-0.5">
+                  {new Date(itinerary.createdAt).toLocaleDateString('en-IN', { weekday: 'long', month: 'short', day: 'numeric' })}
+                </p>
+              </div>
+              <span className="text-xs font-medium text-slate-400 bg-slate-100 px-3 py-1.5 rounded-lg">
+                {itinerary.stops.length} stops
               </span>
             </div>
 
-            {itinerary.stops.map((stop, i) => (
-              <PlaceCard
-                key={stop.place.id}
-                stop={stop}
-                isFirst={i === 0}
-              />
-            ))}
+            <div className="space-y-0">
+              {itinerary.stops.map((stop, i) => (
+                <PlaceCard
+                  key={stop.place.id}
+                  stop={stop}
+                  isFirst={i === 0}
+                />
+              ))}
+            </div>
 
-            <div className="flex gap-3 pt-4">
+            <div className="flex gap-3 pt-6">
               <Link
                 href="/plan"
-                className="flex-1 text-center py-3 bg-[#1B4965] text-white rounded-full font-semibold hover:bg-[#15384f]"
+                className="flex-1 text-center btn-secondary py-3.5 text-sm"
               >
-                🔄 Regenerate Plan
+                Regenerate
               </Link>
               <Link
                 href="/plan"
-                className="flex-1 text-center py-3 border-2 border-[#1B4965] text-[#1B4965] rounded-full font-semibold hover:bg-[#FAF7F2]"
+                className="flex-1 text-center py-3.5 border-2 border-slate-200 text-slate-500 rounded-2xl font-semibold text-sm hover:border-primary hover:text-primary transition-all"
               >
-                ✏️ Edit Preferences
+                Edit Preferences
               </Link>
             </div>
           </div>
 
-          {/* Map (Desktop: sticky sidebar, Mobile: toggle) */}
+          {/* Map */}
           <div className="lg:col-span-2 mt-6 lg:mt-0">
             <div className="lg:sticky lg:top-36">
               <button
                 onClick={() => setShowMap(!showMap)}
-                className="lg:hidden w-full mb-4 py-3 bg-white border rounded-xl text-[#1B4965] font-semibold shadow-sm"
+                className="lg:hidden w-full mb-4 py-3 card-premium text-primary font-semibold text-sm text-center"
               >
-                {showMap ? '🗺️ Hide Map' : '🗺️ Show Map'}
+                {showMap ? 'Hide Map' : 'Show Map'}
               </button>
               <div className={`${showMap ? 'block' : 'hidden'} lg:block`}>
                 <TrafficMap

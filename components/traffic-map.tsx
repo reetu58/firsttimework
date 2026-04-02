@@ -26,7 +26,6 @@ export default function TrafficMap({ stops, center }: Props) {
     const initMap = async () => {
       const L = (await import('leaflet')).default;
 
-      // Cleanup previous
       if (mapInstanceRef.current) {
         mapInstanceRef.current.remove();
         mapInstanceRef.current = null;
@@ -47,10 +46,10 @@ export default function TrafficMap({ stops, center }: Props) {
 
       stops.forEach((stop) => {
         const icon = L.divIcon({
-          html: `<div style="background:#1B4965;color:white;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:14px;border:2px solid white;box-shadow:0 2px 4px rgba(0,0,0,0.3)">${stop.order}</div>`,
+          html: `<div style="background:linear-gradient(135deg,#0F172A,#1E293B);color:white;width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;border:2px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.2)">${stop.order}</div>`,
           className: '',
-          iconSize: [28, 28],
-          iconAnchor: [14, 14],
+          iconSize: [32, 32],
+          iconAnchor: [16, 16],
         });
 
         L.marker([stop.lat, stop.lng], { icon })
@@ -61,7 +60,12 @@ export default function TrafficMap({ stops, center }: Props) {
       });
 
       if (points.length > 1) {
-        L.polyline(points, { color: '#1B4965', weight: 3, opacity: 0.7, dashArray: '8, 8' }).addTo(map);
+        L.polyline(points, {
+          color: '#0F172A',
+          weight: 3,
+          opacity: 0.5,
+          dashArray: '8, 8',
+        }).addTo(map);
       }
 
       if (points.length > 0) {
@@ -82,8 +86,12 @@ export default function TrafficMap({ stops, center }: Props) {
   }, [mounted, stops, center]);
 
   if (!mounted) {
-    return <div className="w-full h-[400px] bg-gray-100 animate-pulse rounded-xl" />;
+    return <div className="w-full h-[400px] skeleton rounded-2xl" />;
   }
 
-  return <div ref={mapRef} className="w-full h-[400px] rounded-xl overflow-hidden shadow-lg" />;
+  return (
+    <div className="card-premium overflow-hidden">
+      <div ref={mapRef} className="w-full h-[400px]" />
+    </div>
+  );
 }
